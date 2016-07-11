@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1468196005 source:c:\users\chen1\desktop\aircraftsystemsources\aircraftsystemsources\aircraftsystemmainsources.cpp
+	<stdlib.h>
+	<stdio.h>
+	<iostream>
+	"AircraftSystemMainSources.h"
+
+1467881465 c:\users\chen1\desktop\aircraftsystemsources\aircraftsystemsources\aircraftsystemmainsources.h
+
+1467881465 source:c:\users\chen1\desktop\aircraftsystemsources\aircraftsystemsources\aircraftsystemmainsources.h
+
+1467880598 source:c:\users\chen1\desktop\aircraftsystemsources\aircraftsystemsources\main.cpp
+	<iostream>
+	<stdio.h>
+	<stdlib.h>
+	"AircraftSystemMainSources.h"
+
