@@ -1,8 +1,8 @@
 #ifndef AIRCRAFTSYSTEMMAINSOURCES_H_INCLUDED
 #define AIRCRAFTSYSTEMMAINSOURCES_H_INCLUDED
+
+
 //文件结构体
-
-
 typedef struct File
 {
 	FILE *oprint;//文件输出流
@@ -11,10 +11,12 @@ typedef struct File
 	//AirLine  *airline;
 
 }File;
-//航班座位节点： 座位相关信息
 
+
+//航班座位节点： 座位相关信息
 typedef struct FilghtSeatNode
 {
+	short type;//舱位座次
     int Number;//座位号
     char Owner[20];//乘客名称
     char IDcharNumber[20];//乘客身份证号
@@ -31,6 +33,12 @@ typedef struct FilghtSeat
     short SurplusTicketSum;//剩余票数
     short SaleTicketSum;//已售票数
     short TicketSum;//总票数
+	short FirstCabinsSum;//头等舱总票数
+	short SaleFirstCabins;//已售头等舱数
+	short SurplusFirstCabins;//剩余头等舱票数
+	short TouristClassSum;//经济舱总票数
+	short SaleTouristClass;//已售经济舱票数
+	short SurplusTouristClass;//剩余经济舱票数
     float FlightTime;//飞行时间
     struct FilghtSeatNode *head;
     struct FilghtSeatNode *Trail;
@@ -42,9 +50,10 @@ typedef struct FilghtSeat
 //航线航班节点 航班相关信息 包括：航线 始发地 目的地
 typedef struct AirLineNode
 {
-    char StartingStation[20];
-    char Terminus[20];
+    char StartingStation[20];//起点站
+    char Terminus[20];//终点站
     short FilghtNumebr;//航班数
+	short FilghtLineNo;//航线号
     struct FilghtSeat *first;
     struct AirLineNode *Last;
     struct AirLineNode *next;
@@ -74,9 +83,11 @@ int DestroyFilghtData();
 int AddAirLine();
 //删除航线信息
 int DestroyAirline();
-//
+//增加航班
 int AddFilghtNumber();
+//删除航班
 int DestroyFilghtNumber();
+//管理员界面
 int ManageMainFrom();
 //通用函数
 //初始化函数
