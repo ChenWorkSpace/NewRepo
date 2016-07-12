@@ -206,7 +206,7 @@ int InitAircraftSystem(File *file,AirLine *airline)
 int GetAirLineData(File *file,AirLine *airline)
 {
 	AirLineNode *aln = airline->first = (AirLineNode*)malloc(sizeof(AirLineNode)), *alb;
-	int FilghtLineNo = 1;
+	int FilghtLineNo = 1;//航线号
 	int FilghtNumber = 1;
 	file->membersum = 0;
 	FILE *F, *FF;
@@ -221,10 +221,10 @@ int GetAirLineData(File *file,AirLine *airline)
 		strcat_s(str2, ".txt");
 		fopen_s(&FF, str2, "a+");
 		FilghtNumber = 1;
+		alb = (AirLineNode*)malloc(sizeof(AirLineNode));
 		while (fgets(str, 1024, FF))
 		{
 			str[strlen(str) - 1] = '\0';
-			alb = airline->first->next = (AirLineNode*)malloc(sizeof(AirLineNode));
 			alb->FilghtLineNo = FilghtLineNo;
 			alb->FilghtNumber =FilghtNumber ;
 			FilghtNumber++;
@@ -235,18 +235,15 @@ int GetAirLineData(File *file,AirLine *airline)
 			fgets(str, 1024, FF);
 			str[strlen(str) - 1] = '\0';
 
-			cout << "始发站:" << alb->StartingStation << "  终点站:" << alb->Terminus << "航线号：" << alb->FilghtLineNo << "航班数：" << alb->FilghtNumber << endl;
-			aln->next = alb;
-			alb->first;
-
-
+			//cout << "始发站:" << alb->StartingStation << "  终点站:" << alb->Terminus << "航线号：" << alb->FilghtLineNo << "航班数：" << alb->FilghtNumber << endl;
 		}
+		aln->next = alb;
+		alb->Last = aln;
+		aln = alb;
 		FilghtLineNo++;
-
-
-		//break;
-		//fopen_s(&F, str2, "a+");
-		//fscanf_s(F, "%s", str, 1024);
-
 	}
+	aln->next = NULL;
+	AirLineNode* p = airline->first;
+	airline->first = airline->first->next;
+	free(p);
 }
