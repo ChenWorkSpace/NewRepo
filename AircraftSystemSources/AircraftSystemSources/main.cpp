@@ -4,12 +4,14 @@
 #include "AircraftSystemMainSources.h"
 using namespace std;
 
-
+File file;
+AirLine airline;
 
 int main()
 {
-	//InitAircraftSystem();
-	Main();
+
+	InitAircraftSystem(&file,&airline);
+	//Main();
 }
 
 

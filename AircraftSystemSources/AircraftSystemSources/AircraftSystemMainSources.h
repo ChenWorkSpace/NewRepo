@@ -52,12 +52,12 @@ typedef struct AirLineNode
 {
     char StartingStation[20];//起点站
     char Terminus[20];//终点站
-    short FilghtNumebr;//航班数
+    short FilghtNumber;//航班数
 	short FilghtLineNo;//航线号
     struct FilghtSeat *first;
     struct AirLineNode *Last;
     struct AirLineNode *next;
-}AirLineNode;
+}AirLineNode; 
 
 //航线 包括：航线数
 typedef struct AirLine
@@ -67,7 +67,11 @@ typedef struct AirLine
 
 }AirLine;
 
+//获取航线信息
+int GetAirLineData(File *file,AirLine *airline);
 
+//获取航班信息
+int GetFilghtNumberData();
 
 //主界面函数  For User
 int UserMainFrom();
@@ -91,7 +95,7 @@ int DestroyFilghtNumber();
 int ManageMainFrom();
 //通用函数
 //初始化函数
-int InitAircraftSystem();
+int InitAircraftSystem(File *file,AirLine *airline);
 //输入错误
 int InputError();
 //航线列表

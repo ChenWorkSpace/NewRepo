@@ -29,7 +29,6 @@ using namespace std;
 
 
 */
-File file;
 int UserMainFrom()
 {
 	getchar();
@@ -194,15 +193,60 @@ int Main()
 	}
 }
 
-int InitAircraftSystem()
+int InitAircraftSystem(File *file,AirLine *airline)
 {
-	file.membersum = 0;
-	FILE *F;
-	char str[20];
-    fopen_s(&F,"Airline.txt","a+");
-	fscanf_s(F, "%s", str,sizeof(str));
-	cout << str;
-	cin >> str;
+	int elem;
+	GetAirLineData(file, airline);
+	//GetFilghtNumberData();
+	cin >> elem;
 	return 0;
 
+}
+
+int GetAirLineData(File *file,AirLine *airline)
+{
+	AirLineNode *aln = airline->first = (AirLineNode*)malloc(sizeof(AirLineNode)), *alb;
+	int FilghtLineNo = 1;
+	int FilghtNumber = 1;
+	file->membersum = 0;
+	FILE *F, *FF;
+	char str[20], str2[40], temp[20];
+	fopen_s(&F, "Airline.txt", "a+");
+	while (fgets(str, 1024, F))
+	{
+		str[strlen(str) - 1] = '\0';
+		strcpy_s(str2, str);
+		strcat_s(str2, "/");
+		strcat_s(str2, str);
+		strcat_s(str2, ".txt");
+		fopen_s(&FF, str2, "a+");
+		FilghtNumber = 1;
+		while (fgets(str, 1024, FF))
+		{
+			str[strlen(str) - 1] = '\0';
+			alb = airline->first->next = (AirLineNode*)malloc(sizeof(AirLineNode));
+			alb->FilghtLineNo = FilghtLineNo;
+			alb->FilghtNumber =FilghtNumber ;
+			FilghtNumber++;
+			memcpy(alb->StartingStation, str, sizeof(str));
+			fgets(str, 1024, FF);
+			str[strlen(str) - 1] = '\0';
+			memcpy(alb->Terminus, str, sizeof(str));
+			fgets(str, 1024, FF);
+			str[strlen(str) - 1] = '\0';
+
+			cout << "始发站:" << alb->StartingStation << "  终点站:" << alb->Terminus << "航线号：" << alb->FilghtLineNo << "航班数：" << alb->FilghtNumber << endl;
+			aln->next = alb;
+			alb->first;
+
+
+		}
+		FilghtLineNo++;
+
+
+		//break;
+		//fopen_s(&F, str2, "a+");
+		//fscanf_s(F, "%s", str, 1024);
+
+	}
 }
