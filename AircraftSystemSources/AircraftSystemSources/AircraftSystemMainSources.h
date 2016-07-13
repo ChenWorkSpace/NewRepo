@@ -16,7 +16,7 @@ typedef struct File
 //航班座位节点： 座位相关信息
 typedef struct FilghtSeatNode
 {
-	short type;//舱位座次
+	short type;//舱位座次(头等1/经济0)舱 
     int Number;//座位号
     char Owner[20];//乘客名称
     char IDcharNumber[20];//乘客身份证号
@@ -71,7 +71,7 @@ typedef struct AirLine
 int GetAirLineData(File *file,AirLine *airline);
 
 //获取航班信息
-int GetFilghtNumberData();
+int GetFilghtNumberData(char *str,AirLineNode *airlinenode,char *FileAddr);
 
 //主界面函数  For User
 int UserMainFrom();
@@ -111,6 +111,8 @@ int GetTerminus();
 //获取终点站
 int GetInceptionPoint();
 
+//获取航班人员信息
+int GetFilghtMemberData(FilghtSeat *filghtseat,char *addr);
 //主界面
 int Main();
 #endif // AIRCRAFTSYSTEMMAINSOURCES_H_INCLUDED

@@ -207,10 +207,10 @@ int GetAirLineData(File *file,AirLine *airline)
 {
 	AirLineNode *aln = airline->first = (AirLineNode*)malloc(sizeof(AirLineNode)), *alb;
 	int FilghtLineNo = 1;//º½ÏßºÅ
-	int FilghtNumber = 1;
+	int FilghtNumber = 1;//º½°àÊý
 	file->membersum = 0;
 	FILE *F, *FF;
-	char str[20], str2[40], temp[20];
+	char str[20], str2[60], temp[20];
 	fopen_s(&F, "Airline.txt", "a+");
 	while (fgets(str, 1024, F))
 	{
@@ -227,23 +227,122 @@ int GetAirLineData(File *file,AirLine *airline)
 			str[strlen(str) - 1] = '\0';
 			alb->FilghtLineNo = FilghtLineNo;
 			alb->FilghtNumber =FilghtNumber ;
-			FilghtNumber++;
 			memcpy(alb->StartingStation, str, sizeof(str));
 			fgets(str, 1024, FF);
 			str[strlen(str) - 1] = '\0';
 			memcpy(alb->Terminus, str, sizeof(str));
 			fgets(str, 1024, FF);
-			str[strlen(str) - 1] = '\0';
-
+			if(str[strlen(str) - 1] == '\n')
+			str[strlen(str) - 1] ='\0';
+			GetFilghtNumberData(str,alb,str2);
+			FilghtNumber++;
+			break;
 			//cout << "Ê¼·¢Õ¾:" << alb->StartingStation << "  ÖÕµãÕ¾:" << alb->Terminus << "º½ÏßºÅ£º" << alb->FilghtLineNo << "º½°àÊý£º" << alb->FilghtNumber << endl;
 		}
 		aln->next = alb;
 		alb->Last = aln;
 		aln = alb;
 		FilghtLineNo++;
+		fclose(F);
+		fclose(FF);
+		fflush(F);
+		fflush(FF);
 	}
 	aln->next = NULL;
 	AirLineNode* p = airline->first;
 	airline->first = airline->first->next;
 	free(p);
+}
+
+
+int GetFilghtNumberData(char *str,AirLineNode *airlinenode,char *FileAddr)
+{
+	FilghtSeat *head,*last,*temp;
+	last = (FilghtSeat*)malloc(sizeof(FilghtSeat));
+	head = last;
+	float content;
+	FILE *F, *FF;
+	char addr[80];
+	int elem = 0,s,t,u;
+	memcpy(addr, FileAddr, sizeof(addr));
+	while (addr[elem])
+	{
+		if (addr[elem] == '/')
+		{
+			 s = 0;
+			while (str[s])
+			{
+				addr[elem + 1 + s] = str[s];
+				s++;
+			}
+			t = 0;
+			addr[elem + 1 + s] = '/';
+			u = elem + 1 + s+1;
+			while (t<10)
+			{
+				addr[u+t] = str[t];
+
+				t++;
+			}
+			break;
+			//memcpy(addr + elem + 1+strlen(str), str, sizeof(addr));
+		}
+		elem++;
+	}
+	strcat_s(addr, ".txt");
+	if (airlinenode->FilghtNumber == 1)
+	{
+		int test;
+		elem = 0;
+		airlinenode->first = (FilghtSeat*)malloc(sizeof(FilghtSeat));
+		free(head);
+		head = airlinenode->first;
+		last = head;
+		memcpy(head->FilghtNumber, str, sizeof(head->FilghtNumber));
+		fopen_s(&F, addr, "r");
+	    fscanf_s(F, "%d", &test);
+		fscanf_s(F, "%d", &head->TicketSum);
+		fscanf_s(F, "%d", &head->FirstCabinsSum);
+		fscanf_s(F, "%d", &head->TouristClassSum);
+		fscanf_s(F, "%lf", &head->FlightTime);
+		head->SaleFirstCabins = 0;
+		head->SaleTicketSum = 0;
+		head->SaleTouristClass = 0;
+		head->SurplusFirstCabins = head->FirstCabinsSum;
+		head->SurplusTicketSum = head->TicketSum;
+		head->SurplusTouristClass = head->TouristClassSum;
+		fflush(F);
+		GetFilghtMemberData(head,addr );
+		
+	}
+	else
+	{
+		temp = (FilghtSeat*)malloc(sizeof(FilghtSeat));
+		memcpy(temp->FilghtNumber, str, sizeof(temp->FilghtNumber));
+		fopen_s(&F, addr, "a+");
+		fscanf_s(F, "%d", &temp->TicketPrice);
+		fscanf_s(F, "%d", &temp->TicketSum);
+		fscanf_s(F, "%d", &temp->FirstCabinsSum);
+		fscanf_s(F, "%d", &temp->TouristClassSum);
+		fscanf_s(F, "%lf", &temp->FlightTime);
+		temp->SaleFirstCabins = 0;
+		temp->SaleTicketSum = 0;
+		temp->SaleTouristClass = 0;
+		temp->SurplusFirstCabins = temp->FirstCabinsSum;
+		temp->SurplusTicketSum = temp->TicketSum;
+		temp->SurplusTouristClass = temp->TouristClassSum;
+		last->next = temp;
+		last = temp;
+
+	}
+	return 0;
+}
+
+
+int GetFilghtMemberData(FilghtSeat *filghtseat, char *addr)
+{
+	int i = 0;
+	cout << addr;
+	cin >> i;
+	return 0;
 }
