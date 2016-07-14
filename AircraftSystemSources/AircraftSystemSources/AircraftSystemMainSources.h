@@ -19,7 +19,7 @@ typedef struct FilghtSeatNode
 	short type;//舱位座次(头等1/经济0)舱 
     int Number;//座位号
     char Owner[20];//乘客名称
-    char IDcharNumber[20];//乘客身份证号
+    char IDcharNumber[40];//乘客身份证号
     struct FilghtSeatNode *next;//下一个
     struct FilghtSeatNode *Last;//上一个
 
@@ -62,7 +62,7 @@ typedef struct AirLineNode
 //航线 包括：航线数
 typedef struct AirLine
 {
-	int AirLineNumber;
+	int AirLineNumber;//航线数
 	struct AirLineNode *first;
 
 }AirLine;
@@ -74,7 +74,7 @@ int GetAirLineData(File *file,AirLine *airline);
 int GetFilghtNumberData(char *str,AirLineNode *airlinenode,char *FileAddr);
 
 //主界面函数  For User
-int UserMainFrom();
+int UserMainFrom(AirLine *airline);
 
 //修改航班信息
 int ModificationFilghtDataForUser();
@@ -99,7 +99,7 @@ int InitAircraftSystem(File *file,AirLine *airline);
 //输入错误
 int InputError();
 //航线列表
-int FilghtList();
+int FilghtList(AirLine *airline);
 //搜索航班
 int SearchFilght();
 //修改航班信息
@@ -112,7 +112,7 @@ int GetTerminus();
 int GetInceptionPoint();
 
 //获取航班人员信息
-int GetFilghtMemberData(FilghtSeat *filghtseat,char *addr);
+int GetFilghtMemberData(FilghtSeat *filghtseat,FILE *F,char* addr);
 //主界面
-int Main();
+int Main(AirLine *airline);
 #endif // AIRCRAFTSYSTEMMAINSOURCES_H_INCLUDED

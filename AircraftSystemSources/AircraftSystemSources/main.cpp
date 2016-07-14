@@ -16,7 +16,7 @@ int main()
 	cout << elem;
 	cin >> elem;*/
 	InitAircraftSystem(&file,&airline);
-	//Main();
+	Main(&airline);
 	return 0;
 }
 

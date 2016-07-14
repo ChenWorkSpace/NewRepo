@@ -29,7 +29,7 @@ using namespace std;
 
 
 */
-int UserMainFrom()
+int UserMainFrom(AirLine *airline)
 {
 	getchar();
     char elem;
@@ -59,7 +59,7 @@ int UserMainFrom()
 		}
 		else if (elem == 'F' || elem == 'f')
 		{
-			FilghtList();
+			FilghtList(airline);
 		}
 		else if (elem == 'D' || elem == 'd')
 		{
@@ -84,9 +84,39 @@ int ManageMainFrom()
 {
 	return 0;
 }
-int FilghtList()
+int FilghtList(AirLine *airline)
 {
-    return 0;
+	char elem;
+	system("cls");
+	AirLine *AL = airline;
+	AirLineNode *ALN = AL->first;
+	getchar();
+	while (1)
+	{
+		printf("\n\n\n");
+		printf("        --------------------------航班信息管理系统-------------------------\n\n");
+		printf("        航线数：%d \n\n", AL->AirLineNumber);
+		while (ALN)
+		{
+			printf("        航线: %d  %s - %s 航班数: %d \n\n", ALN->FilghtLineNo, ALN->StartingStation, ALN->Terminus, ALN->FilghtNumber, ALN->FilghtNumber);
+			ALN = ALN->next;
+		}
+		printf("        \n\n\n");
+		printf("        -------------------------------------------------------------------\n");
+		printf("        R[返回]                                                     Q[退出]\n");
+		scanf_s("%c", &elem);
+		if (elem == 'Q' || elem == 'q')
+		{
+			exit(0);
+		}
+		else if (elem == 'R' || elem == 'r')
+		{
+			return 0;
+		}
+		else
+			InputError();
+	}
+	
 }
 
 int SearchFilght()
@@ -162,12 +192,13 @@ int InputError()
 		scanf_s("%c", &elem);
         return 0;
 }
-int Main()
+int Main(AirLine *airline)
 {
 	char elem;
 	while (1)
 	{
 		system("cls");//清屏操作
+
 		printf("\n\n\n");
 		printf("        --------------------------航班信息管理系统-------------------------\n\n");
 		printf("        [U]用户界面                                             [M]管理员界面 \n\n");
@@ -177,7 +208,7 @@ int Main()
 		scanf_s("%c", &elem);
 		if (elem == 'U' || elem == 'u')
 		{
-			UserMainFrom();
+			UserMainFrom(airline);
 		}
 		else if (elem == 'M' || elem == 'm')
 		{
@@ -198,7 +229,6 @@ int InitAircraftSystem(File *file,AirLine *airline)
 	int elem;
 	GetAirLineData(file, airline);
 	//GetFilghtNumberData();
-	cin >> elem;
 	return 0;
 
 }
@@ -236,18 +266,19 @@ int GetAirLineData(File *file,AirLine *airline)
 			str[strlen(str) - 1] ='\0';
 			GetFilghtNumberData(str,alb,str2);
 			FilghtNumber++;
-			break;
 			//cout << "始发站:" << alb->StartingStation << "  终点站:" << alb->Terminus << "航线号：" << alb->FilghtLineNo << "航班数：" << alb->FilghtNumber << endl;
 		}
 		aln->next = alb;
 		alb->Last = aln;
 		aln = alb;
-		FilghtLineNo++;
-		fclose(F);
-		fclose(FF);
-		fflush(F);
-		fflush(FF);
+		airline->AirLineNumber++;
+
+		FilghtLineNo++;;
 	}
+	fclose(F);
+	fclose(FF);
+	fflush(F);
+	fflush(FF);
 	aln->next = NULL;
 	AirLineNode* p = airline->first;
 	airline->first = airline->first->next;
@@ -311,8 +342,7 @@ int GetFilghtNumberData(char *str,AirLineNode *airlinenode,char *FileAddr)
 		head->SurplusFirstCabins = head->FirstCabinsSum;
 		head->SurplusTicketSum = head->TicketSum;
 		head->SurplusTouristClass = head->TouristClassSum;
-		fflush(F);
-		GetFilghtMemberData(head,addr );
+		GetFilghtMemberData(head,F,addr );
 		
 	}
 	else
@@ -331,18 +361,78 @@ int GetFilghtNumberData(char *str,AirLineNode *airlinenode,char *FileAddr)
 		temp->SurplusFirstCabins = temp->FirstCabinsSum;
 		temp->SurplusTicketSum = temp->TicketSum;
 		temp->SurplusTouristClass = temp->TouristClassSum;
+		GetFilghtMemberData(temp, F, addr);
 		last->next = temp;
 		last = temp;
 
 	}
+	fclose(F);
 	return 0;
 }
 
 
-int GetFilghtMemberData(FilghtSeat *filghtseat, char *addr)
+int GetFilghtMemberData(FilghtSeat *filghtseat, FILE *F,char *addr)
 {
-	int i = 0;
-	cout << addr;
-	cin >> i;
+	FILE *FF;
+	int i = 0,m=0,n,d=0;
+	char str[40], str2[20], name[20], ID[40];
+	FilghtSeatNode *head, *last, *temp;
+	fgets(str2, 1024, F);
+	while (fgets(str2, 1024, F))
+	{
+		if (str2[0] == '\n')
+			break;
+		i = 0, m = 0;
+		memcpy(str, addr, sizeof(str));
+		while (addr[i])
+		{
+			if (addr[i] == '/')
+			{
+				m++;
+			}
+			if (addr[i] == '/'&&m == 2)
+			{
+				n = 0;
+				while (str2[n])
+				{
+					str[i + 1] = str2[n];
+					i++;
+					n++;
+				}
+				str[i] = '\0';
+				strcat_s(str, ".txt");
+				break;
+			}
+			i++;
+		}
+		fopen_s(&FF, str, "a+");
+		if (filghtseat->SaleTicketSum == 0)
+		{
+			head = (FilghtSeatNode*)malloc(sizeof(FilghtSeatNode));
+			fscanf_s(FF, "%d", &head->type);
+			fscanf_s(FF, "%d", &head->Number);
+			fscanf_s(FF, "%s", name, sizeof(name));
+			memcpy(head->Owner, name, sizeof(name));
+			fscanf_s(FF, "%s", ID, sizeof(ID));
+			memcpy(head->IDcharNumber, ID, sizeof(ID));
+			filghtseat->head = head;
+			filghtseat->Trail = head;
+			filghtseat->SaleTicketSum++;
+		}
+		else
+		{
+			temp = (FilghtSeatNode*)malloc(sizeof(FilghtSeatNode));
+			fscanf_s(FF, "%d", &temp->type);
+			fscanf_s(FF, "%d", &temp->Number);
+			fscanf_s(FF, "%s", name, sizeof(name));
+			memcpy(temp->Owner, name, sizeof(name));
+			fscanf_s(FF, "%s", ID, sizeof(ID));
+			memcpy(temp->IDcharNumber, ID, sizeof(ID));
+			filghtseat->Trail->next = temp;
+			filghtseat->Trail = filghtseat->Trail->next;
+			filghtseat->SaleTicketSum++;
+		}
+	}
+	
 	return 0;
 }
