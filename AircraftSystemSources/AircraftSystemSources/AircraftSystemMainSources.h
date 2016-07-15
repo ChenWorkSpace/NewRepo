@@ -29,6 +29,7 @@ typedef struct FilghtSeatNode
 typedef struct FilghtSeat
 {
     char FilghtNumber[20];//航班名
+	int  FilghtEum;//航班号
     float TicketPrice;//机票价格
     short SurplusTicketSum;//剩余票数
     short SaleTicketSum;//已售票数
@@ -42,8 +43,8 @@ typedef struct FilghtSeat
     float FlightTime;//飞行时间
     struct FilghtSeatNode *head;
     struct FilghtSeatNode *Trail;
-    struct FilghtSeat *next;
-    struct FilghtSeat *Last;
+    struct FilghtSeat *next;//下一个
+    struct FilghtSeat *Last;//上一个
 
 }FilghtSeat;
 
@@ -55,6 +56,7 @@ typedef struct AirLineNode
     short FilghtNumber;//航班数
 	short FilghtLineNo;//航线号
     struct FilghtSeat *first;
+	struct FilghtSeat *Trail;
     struct AirLineNode *Last;
     struct AirLineNode *next;
 }AirLineNode; 
@@ -79,10 +81,7 @@ int UserMainFrom(AirLine *airline);
 //修改航班信息
 int ModificationFilghtDataForUser();
 //订票
-int BookTheTicket();
-//退票
-int DestroyFilghtData();
-
+int BookTheTicket(AirLine *airline);
 //主界面函数 For Manage
 int AddAirLine();
 //删除航线信息
@@ -101,18 +100,45 @@ int InputError();
 //航线列表
 int FilghtList(AirLine *airline);
 //搜索航班
-int SearchFilght();
+int SearchFilght(AirLine *airline);
 //修改航班信息
 int ModificationFilghtDataForManage();
 //获取起点站
 //terminus终点站
 //inception point 起点站
-int GetTerminus();
+int GetTerminus(AirLine *airline);
 //获取终点站
-int GetInceptionPoint();
+int GetInceptionPoint(AirLine *airline);
 
 //获取航班人员信息
 int GetFilghtMemberData(FilghtSeat *filghtseat,FILE *F,char* addr);
 //主界面
 int Main(AirLine *airline);
+//通过航班号寻找航班
+int SearchforFilghtNumber(AirLine *airline);
+
+//通过始发地查找航班
+int SearchforStaringStation(AirLine *airline);
+
+//通过终点站查找航班
+int SearchforTerminus(AirLine *airline);
 #endif // AIRCRAFTSYSTEMMAINSOURCES_H_INCLUDED
+int SelecetUserMain();
+
+//登陆账户
+int LoginUserMain();
+
+//注册账户
+int RegisterUserMain();
+
+//注销机票
+int DestroyFilghtData();
+
+//创建成员信息
+int AddMemberData(AirLineNode *aln,int FilghtNumber);
+
+//创建成员信息文件
+int AddMemberDataforFile(FilghtSeat *fs,int type,char *name,char *ID);
+
+//获取用户下的机票信息
+int GetMyData(AirLine *airline);

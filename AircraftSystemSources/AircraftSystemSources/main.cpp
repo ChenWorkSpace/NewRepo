@@ -9,14 +9,9 @@ AirLine airline;
 
 int main()
 {
-	/*FILE *f;
-	int elem;
-	fopen_s(&f, "FilghtA/Filghta-1/Filghta-1.txt","r");
-	fscanf_s(f, "%d", &elem);
-	cout << elem;
-	cin >> elem;*/
-	InitAircraftSystem(&file,&airline);
-	Main(&airline);
+	//char addr[60] = "user";
+	InitAircraftSystem(&file,&airline);//初始化系统
+	Main(&airline);//主界面
 	return 0;
 }
 
